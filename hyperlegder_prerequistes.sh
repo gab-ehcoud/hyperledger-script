@@ -24,9 +24,24 @@ if [[ $input == "Y" || $input == "y" ]]; then
         mkdir Fabric-Samples
         cd Fabric-Samples
         echo -e "\n"
-        echo -e "\e[1;47mDownloading Fabric samples, Docker images, and binaries"
+        echo "Downloading Fabric samples, Docker images, and binaries"
         curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh
         ./install-fabric.sh docker binary samples
+        cd fabric-samples/test-network
+        ./network.sh down
+        docker rm -f $(docker ps -aq)
+        echo -e "\n"
+        echo -e "\e[1;33mBRINGING UP THE NETWORK"
+        echo -e "\n"
+        ./network.sh up
+        echo -e "\n"
+        echo -e "\e[1;33mCREATING CHANNEL"
+        echo -e "Input first channel name"
+        read CHANNELNAME1
+        ./network.sh createChannel -c $CHANNELNAME1
+        echo -e "Input second channel name"
+        read CHANNELNAME2
+        ./network.sh createChannel -c $CHANNELNAME2
 else
         echo "We don't do that here"
 fi
