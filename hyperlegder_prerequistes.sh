@@ -99,11 +99,14 @@ if [[ $input == "Y" || $input == "y" ]]; then
         choice=$?
 
         if [[ $choice == "0" ]]; then
-                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java -ccl java
+                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java -ccl java -c $CHANNELNAME1
+                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java -ccl java -c $CHANNELNAME2
         elif [[ $choice == "1" ]]; then
-                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-javascript -ccl javascript
+                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-javascript -ccl javascript -c $CHANNELNAME1
+                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-javascript -ccl javascript -c $CHANNELNAME2
         elif [[ $choice == "2" ]]; then
-                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go
+                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c $CHANNELNAME1
+                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c $CHANNELNAME2
         fi
         echo
         echo "ADDING BINARIES TO PATH"
