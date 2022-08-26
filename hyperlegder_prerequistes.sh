@@ -18,8 +18,15 @@ if [[ $input == "Y" || $input == "y" ]]; then
         echo -e "\e[1;34mDocker is ready"
         docker --version | awk -F, '{ print $1 }' 
         docker-compose --version | awk -F, '{ print $1 }'
-
-        
+        echo -e "\n"
+        echo -e "\e[1;47mMaking Sure Docker daemon is running."
+        sudo systemctl start docker
+        mkdir Fabric-Samples
+        cd Fabric-Samples
+        echo -e "\n"
+        echo -e "\e[1;47mDownloading Fabric samples, Docker images, and binaries"
+        curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh
+        ./install-fabric.sh docker binary samples
 else
         echo "We don't do that here"
 fi
