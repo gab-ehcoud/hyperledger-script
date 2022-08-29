@@ -85,11 +85,11 @@ if [[ $input == "Y" || $input == "y" ]]; then
         echo -e "\n"
         echo -e "\e[1;33mCREATING CHANNEL"
         echo -e "Input first channel name"
-        read CHANNELNAME1
-        ./network.sh createChannel -c $CHANNELNAME1
-        echo -e "Input second channel name"
-        read CHANNELNAME2
-        ./network.sh createChannel -c $CHANNELNAME2
+        # read CHANNELNAME1
+        ./network.sh createChannel
+        # echo -e "Input second channel name"
+        # read CHANNELNAME2
+        # ./network.sh createChannel -c $CHANNELNAME2
         echo -e "Please Select the language:"
         echo
 
@@ -102,8 +102,7 @@ if [[ $input == "Y" || $input == "y" ]]; then
                 ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java -ccl java -c $CHANNELNAME1
                 ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-java -ccl java -c $CHANNELNAME2
         elif [[ $choice == "1" ]]; then
-                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-javascript -ccl javascript -c $CHANNELNAME1
-                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-javascript -ccl javascript -c $CHANNELNAME2
+                ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-javascript -ccl javascript
         elif [[ $choice == "2" ]]; then
                 ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c $CHANNELNAME1
                 ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c $CHANNELNAME2
@@ -124,10 +123,10 @@ if [[ $input == "Y" || $input == "y" ]]; then
         echo
         echo 
         echo "\e[1;34mInitializing the ledger with assets"
-        peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C $CHANNELNAME1 -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
-        peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C $CHANNELNAME2 -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
-        peer chaincode query -C $CHANNELNAME1 -n basic -c '{"Args":["GetAllAssets"]}'
-        peer chaincode query -C $CHANNELNAME2 -n basic -c '{"Args":["GetAllAssets"]}'
+        peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
+        
+        peer chaincode query -C mychannel $ -n basic -c '{"Args":["GetAllAssets"]}'
+        
 else
         echo "We don't do that here"
 fi
