@@ -51,6 +51,7 @@ if [ "$EUID" -ne 0 ]
   then echo -e "\e[1;31mPlease run as root"
   exit
 fi
+sudo -i
 echo -e "\n"
 echo -e "\e[1;34m-----Hyperledger Fabric-----"
 echo -e "\e[33mRather than an open permissionless system that allows unknown identities to participate in the network (requiring protocols like “proof of work” to validate transactions and secure the network), the members of a Hyperledger Fabric network enroll through a trusted Membership Service Provider (MSP)."
@@ -69,12 +70,12 @@ if [[ $input == "Y" || $input == "y" ]]; then
         echo -e "\n"
         echo -e "\e[1;37mMaking Sure Docker daemon is running."
         sudo systemctl start docker
+        sudo systemctl enable docker
         mkdir Fabric-Samples
         cd Fabric-Samples
         echo -e "\n"
         echo "Downloading Fabric samples, Docker images, and binaries"
-        curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh
-        ./install-fabric.sh docker binary samples
+        curl -sSL https://bit.ly/2ysbOFE | bash -s        
         cd fabric-samples/test-network
         ./network.sh down
         docker rm -f $(docker ps -aq)
@@ -122,10 +123,10 @@ if [[ $input == "Y" || $input == "y" ]]; then
         export CORE_PEER_ADDRESS=localhost:7051
         echo
         echo 
-        echo "\e[1;34mInitializing the ledger with assets"
+        echo -e "\e[1;34mInitializing the ledger with assets"
         peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
 
-        echo "\e[1;33mGetting arguments to verify the installation"
+        echo -e "\e[1;33mGetting arguments to verify the installation"
         
         peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}' 
 else
